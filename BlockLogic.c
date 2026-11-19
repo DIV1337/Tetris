@@ -325,7 +325,7 @@ void GetBlockCoordinates(Block *block, Coordinate coords[4])
         case 7: // Z-block
             switch (block->rotation) {
                 case 0:
-                    block->lowestPoints[0] = (Coordinate){block->x - 1, block->y};    
+                    block->lowestPoints[0] = (Coordinate){block->x - 1, block->y + 1};    
                     block->lowestPoints[1] = (Coordinate){block->x,     block->y};    
                     block->lowestPoints[2] = (Coordinate){block->x - 2, block->y + 1};
                     block->lowestPoints[3] = (Coordinate){-1, -1};
@@ -352,6 +352,7 @@ void GetBlockCoordinates(Block *block, Coordinate coords[4])
                    block->lowestPoints[0] = (Coordinate){block->x - 1, block->y};    
                     block->lowestPoints[1] = (Coordinate){block->x,     block->y};    
                     block->lowestPoints[2] = (Coordinate){block->x - 2, block->y + 1};
+                    block->lowestPoints[3] = (Coordinate){-1, -1};
 
                     coords[0] = (Coordinate){block->x - 1, block->y};
                     coords[1] = (Coordinate){block->x,     block->y};
@@ -396,32 +397,40 @@ void updateBlockPosition(Block *block) {
         int x = block->lowestPoints[i].x;
         int y = block->lowestPoints[i].y;
 
-        // Ignore unused lowestPoints
-        if (x == -1 && y == -1) {
+        if (x == -1 && y == -1)
             continue;
-        }
 
-        // Check bottom boundary
+        printf("lowest[%d] = (%d,%d)\n", i, x, y);
+        printf("Checking below (%d,%d): %d\n", x, y + 1, Grid[y + 1][x]);
+
         if (y + 1 >= 20) {
+            printf("Hit bottom\n");
             block->isDead = true;
             return;
         }
 
-        // Check side boundaries
-        if (x < 0 || x >= 10) {
-            block->isDead = true;
-            return;
-        }
-
-        // Check collision with another block
         if (Grid[y + 1][x] != 0) {
+            printf("Collision!\n");
             block->isDead = true;
             return;
         }
     }
-
     block->y++;
 
     printf("Block type %d moved to new position (%d, %d)\n",
            block->type, block->x, block->y);
+}
+
+Block *FindActiveBlock() {
+    return &BlockArray[BlockArraySize - 1];
+}
+
+void MoveActiveBlockLeft() {
+    Block *activeBlock = FindActiveBlock();
+    activeBlock-> x--;
+}
+
+void MoveActiveBlockRight() {
+    Block *activeBlock = FindActiveBlock();
+    activeBlock-> x++;
 }

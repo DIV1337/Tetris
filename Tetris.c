@@ -5,9 +5,17 @@
 #include <math.h>
 #include "Grid.h"
 #include "Timing.h"
+#include <stdlib.h> // Temporary include for rand() function
 
 void updateBlockPosition(Block *block); // initialize
+void MoveActiveBlockLeft(void);
+void MoveActiveBlockRight(void);
+
 int Grid[20][10] = {0};
+bool QuitGame = false;
+bool moveActiveBlockLeft = false;
+bool moveActiveBlockRight = false;
+int randint = 0;
 
 Coordinate coords[4];
 
@@ -42,18 +50,43 @@ void readAndUpdateGrid() {
 int main(void) {
     spawnBlock();
     printf("Spawned Block!\n");
-    while (true) {
+    while (!QuitGame) {
+
+        randint = rand() % 10;
+
+        if (randint < 3) {
+            moveActiveBlockLeft = true;
+        } else if (randint < 6) {
+            moveActiveBlockRight = true;
+        } else {
+            moveActiveBlockLeft = false;
+            moveActiveBlockRight = false;
+        }
+
+
         if (BlockArray[BlockArraySize - 1].isDead) {
             spawnBlock();
             printf("Array size: %d\n", BlockArraySize);
             printf("Spawned Block!\n");
         }
+
+        if (moveActiveBlockLeft) {
+            MoveActiveBlockLeft();
+        }
+
+        if (moveActiveBlockRight) {
+            MoveActiveBlockRight();
+        }
+
+
         printf("\n");
         printf("\n");
         printf("\n");
         clearGrid();
         readAndUpdateGrid();
         printGrid();
+
+
         for (int i = 0; i < BlockArraySize; i++) {
             updateBlockPosition(&BlockArray[i]);
             clearGrid();
