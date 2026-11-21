@@ -50,7 +50,7 @@ void draw_tile(int origin_x, int origin_y, char color_num) {
     }
 }
 
-void update_screen(int grid[200]) {
+void update_screen(int grid[20][10]) {
     backbuffer_frame = !backbuffer_frame;
 
     //fill all pixels with background color
@@ -67,7 +67,7 @@ void update_screen(int grid[200]) {
 
     for (int x = 0; x < 10; x++) {
         for (int y = 0; y < 20; y++) {
-            int value = grid[y*10 + x];
+            int value = grid[y][x];
             if (value != 0) {
                 draw_tile(10 + x*11, 10 + y*11, value - 1);
             }
@@ -89,10 +89,10 @@ void testing_main() {
 
     int test_counter = 0;
 
-    int test_grid[200];
+    int test_grid[20][10];
     for (int x = 0; x < 10; x++) {
         for (int y = 0; y < 20; y++) {
-            test_grid[y*10 + x] = 0;
+            test_grid[y][x] = 0;
         }
     }
 
@@ -104,7 +104,7 @@ void testing_main() {
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 20; y++) {
                 if ((x * y) % 3 == 0) {
-                    test_grid[y*10 + x + test_counter] = (x + y) % 8;
+                    test_grid[(y + test_counter) % 20][(x + test_counter) % 10] = (x + y) % 8;
                 }
             }
         }
