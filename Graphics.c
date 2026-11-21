@@ -28,10 +28,6 @@ char* colors[] = {red, orange, yellow, green, cyan, blue, magenta};
 
 const int background_color = 0b00100101;
 
-void handle_interrupt (unsigned _irq) {
-
-}
-
 void delay(int time) {
     for (int i = 0; i < time; i++) {
         asm volatile ("nop");
@@ -89,7 +85,7 @@ void update_screen(int grid[200]) {
     }
 }
 
-int main() {
+void testing_main() {
 
     int test_counter = 0;
 
