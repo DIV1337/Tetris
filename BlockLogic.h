@@ -10,6 +10,6 @@ extern int BlockArraySize;
 extern Block BlockArray[MAX_BLOCKS];
 
 void spawnBlock(void);
-void GetBlockCoordinates(Block block, Coordinate coords[4]);
+void GetBlockCoordinates(Block *block, Coordinate coords[4]);
 
 #endif
