@@ -6,11 +6,14 @@
 #include "Grid.h"
 #include "Timing.h"
 #include <stdlib.h> // Temporary include for rand() function
+#include "Graphics.h"
 
 void updateBlockPosition(Block *block); // initialize
 void MoveActiveBlockLeft(void);
 void MoveActiveBlockRight(void);
 
+bool buttonPressed = false;
+int switchState = 0; // 0 for left, 1 for right
 int Grid[20][10] = {0};
 bool QuitGame = false;
 bool moveActiveBlockLeft = false;
@@ -36,6 +39,24 @@ void printGrid() {
     }
 }
 
+void IsRowClear() {
+    for (int i = 0; i < 20; i++) {
+        bool isRowFull = true;
+        for (int j = 0; j < 10; j++) {
+            if (Grid[i][j] == 0) {
+                isRowFull = false;
+                break;
+            }
+        }
+        if (isRowFull) {
+            for (int j = 0; j < 10; j++) {
+                Grid[i][j] = 0;
+            }
+            RowClearGravity();
+        }
+    }
+}
+
 void readAndUpdateGrid() {
     for (int i = 0; i < BlockArraySize; i++) {
         GetBlockCoordinates(&BlockArray[i], coords);
@@ -47,22 +68,12 @@ void readAndUpdateGrid() {
     }
 }
 
+init_interrupts();
+
 int main(void) {
     spawnBlock();
     printf("Spawned Block!\n");
     while (!QuitGame) {
-
-        randint = rand() % 10;
-
-        if (randint < 3) {
-            moveActiveBlockLeft = true;
-        } else if (randint < 6) {
-            moveActiveBlockRight = true;
-        } else {
-            moveActiveBlockLeft = false;
-            moveActiveBlockRight = false;
-        }
-
 
         if (BlockArray[BlockArraySize - 1].isDead) {
             spawnBlock();
@@ -70,14 +81,10 @@ int main(void) {
             printf("Spawned Block!\n");
         }
 
-        if (moveActiveBlockLeft) {
-            MoveActiveBlockLeft();
+        if (buttonPressed) {
+            move();
+            MoveActiveBlock(switchState);
         }
-
-        if (moveActiveBlockRight) {
-            MoveActiveBlockRight();
-        }
-
 
         printf("\n");
         printf("\n");

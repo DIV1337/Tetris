@@ -1,4 +1,4 @@
-
+#include "BlockLogic.h"
 extern void init_interrupts(void);
 extern void update_screen(int[20][10], int);
 
@@ -37,8 +37,5 @@ void game_update() {
 
 void move(int direction) {
     toggle_leds();
-}
-
-int main() {
-    init_interrupts();
+    moveActiveBlock(direction);
 }

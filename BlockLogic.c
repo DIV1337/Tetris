@@ -425,12 +425,25 @@ Block *FindActiveBlock() {
     return &BlockArray[BlockArraySize - 1];
 }
 
-void MoveActiveBlockLeft() {
+void MoveActiveBlock(int Left0Right1) {
     Block *activeBlock = FindActiveBlock();
+    if (Left0Right1 == 0) {
+        activeBlock->x--;
+    } else if (Left0Right1 == 1) {
+        activeBlock->x++;
+    }
     activeBlock-> x--;
 }
 
-void MoveActiveBlockRight() {
-    Block *activeBlock = FindActiveBlock();
-    activeBlock-> x++;
+void RowClearGravity() {
+    for (int i = 19; i > 0; i--) {
+        for (int j = 0; j < 10; j++) {
+            if (Grid[i][j] != 0 && Grid[i + 1][j] == 0) {
+                int blockTypePlaceholder = Grid[i][j];
+                Grid[i + 1][j] = blockTypePlaceholder;
+                Grid[i][j] = 0;
+            }
+        }
+
+    }
 }

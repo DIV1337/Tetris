@@ -11,5 +11,6 @@ extern Block BlockArray[MAX_BLOCKS];
 
 void spawnBlock(void);
 void GetBlockCoordinates(Block *block, Coordinate coords[4]);
+void moveActiveBlock(int direction);
 
 #endif
